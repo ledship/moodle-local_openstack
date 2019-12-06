@@ -24,7 +24,7 @@ final class Middleware
             return function ($request, array $options) use ($handler) {
                 return $handler($request, $options)->then(
                     function (ResponseInterface $response) use ($request, $handler) {
-                        if ($response->getStatusCode() < 400) {
+                        if ($response->getStatusCode() < 400 || $request->getMethod() == "DELETE" || $request->getMethod() == "HEAD") {
                             return $response;
                         }
                         throw (new Builder())->httpError($request, $response);
